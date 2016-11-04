@@ -29,7 +29,9 @@ public class UserServiceImpl implements UserService{
 	@Override
 	public void add(User user) {
 //		System.out.println("Save and Flush!!!**************************!!!" + user.getUserName());
-		if( userRepo.findByUserName(user.getUserName()) == null ) {
+		String username = user.getUsername();
+		if( userRepo.findByUsername(username) == null ) {
+		   user.setUsername(username);
 		   userRepo.saveAndFlush(user);
 		}
 	}

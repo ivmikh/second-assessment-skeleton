@@ -35,10 +35,11 @@ public class UserController {
 	}
 	
 	@PostMapping
-	public void putUser(@RequestBody User user) {
-		System.out.println("User is creating!!!!!*****************!!!!" + getUser(user).getUserName());
+	public User putUser(@RequestBody User user) {
+		System.out.println("User is creating!!!!!*****************!!!!" + getUser(user).getUsername());
 //		if(!userService.exists(user)){
 		  userService.add(user);
+		  return user;
 //		}
 	}
 	

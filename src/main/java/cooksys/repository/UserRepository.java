@@ -8,6 +8,6 @@ import cooksys.entity.User;
 
 public interface UserRepository extends JpaRepository<User, Long> {
 //	User findById(Long id);
-	User findByUserName(String userName);
+	User findByUsername(String userName);
 	List<User> findAll();
 }

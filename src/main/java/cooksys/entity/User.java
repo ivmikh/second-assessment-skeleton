@@ -19,7 +19,7 @@ public class User {
 //	@Column(columnDefinition = "serial")  //it has "bigint" type by default
 	private Long id;
 	
-	private String userName;
+	private String username;
 	
 	@OneToOne (cascade = CascadeType.ALL)
 	private Credentials credentials;
@@ -38,19 +38,22 @@ public class User {
 		this.id = id;
 	}
 
-	public String getUserName() {
-		return userName;
+	public String getUsername() {
+//		return this.credentials.getUsername();
+		return username;
 	}
 
-	public void setUserName(String userName) {
-		this.userName = userName;
+	public void setUsername(String username) {
+//		this.username = username;
+//		this.username = credentials.getUsername();
+		this.username = getCredentials().getUsername();
 	}
 	
 	
 	
-//	private Credentials getCredentials() {
-//		return credentials;
-//	}
+	private Credentials getCredentials() {
+		return credentials;
+	}
 
 	public void setCredentials(Credentials credentials) {
 		this.credentials = credentials;
