@@ -3,13 +3,11 @@ package cooksys.entity;
 import java.util.Date;
 import java.sql.Timestamp;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.MapsId;
 import javax.persistence.OneToOne;
 import javax.persistence.PrePersist;
 
@@ -23,17 +21,18 @@ public class User {
 	
 	private String userName;
 	
-//	@OneToOne(fetch=FetchType.LAZY) // @MapsId
-//	@JoinColumn(name="profile_id")
-	@OneToOne @MapsId
+	@OneToOne (cascade = CascadeType.ALL)
+	private Credentials credentials;
+	
+	@OneToOne(cascade = CascadeType.ALL) //@MapsId
 	private Profile profile;
 	
 	@Column(insertable=true,updatable=false)
 	private Timestamp joined;
 
-//	public Long getId() {
-//		return id;
-//	}
+	public Long getId() {
+		return id;
+	}
 
 	public void setId(Long id) {
 		this.id = id;
@@ -47,6 +46,16 @@ public class User {
 		this.userName = userName;
 	}
 	
+	
+	
+//	private Credentials getCredentials() {
+//		return credentials;
+//	}
+
+	public void setCredentials(Credentials credentials) {
+		this.credentials = credentials;
+	}
+
 	public Profile getProfile() {
 		return this.profile;
 	}

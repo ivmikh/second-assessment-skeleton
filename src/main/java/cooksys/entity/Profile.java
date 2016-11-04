@@ -3,29 +3,29 @@ package cooksys.entity;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
-import javax.persistence.Transient;
 
 @Entity
 public class Profile {
 
 	@Id
 	@GeneratedValue
-	private Long id;
+	private Long profileId;
 	
-	@Transient
 	private String firstName;  // optional
-	@Transient
 	private String lastName;   // optional
 	
 	private String email;      // required !!!!!!!
-	@Transient
 	private String phone;      // optional
-//	public Long getId() {
-//		return id;
-//	}
-	public void setId(Long id) {
-		this.id = id;
+	
+	
+	
+	public Long getId() {
+		return profileId;
 	}
+	public void setId(Long id) {
+		this.profileId = id;
+	}
+	
 	public String getFirstName() {
 		return (firstName == null)? "": firstName;
 	}
