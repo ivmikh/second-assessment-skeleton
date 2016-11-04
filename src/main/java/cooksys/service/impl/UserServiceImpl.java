@@ -1,5 +1,7 @@
 package cooksys.service.impl;
 
+import java.util.List;
+
 import org.springframework.stereotype.Service;
 
 import cooksys.entity.User;
@@ -27,12 +29,19 @@ public class UserServiceImpl implements UserService{
 	@Override
 	public void add(User user) {
 //		System.out.println("Save and Flush!!!**************************!!!" + user.getUserName());
-		userRepo.saveAndFlush(user);
+		if( userRepo.findByUserName(user.getUserName()) == null ) {
+		   userRepo.saveAndFlush(user);
+		}
 	}
 
 	@Override
-	public boolean exists(User user) {
-		// returns true if user can be found by userName
-		return userRepo.findByUserName(user.getUserName()) == null ? false : true;
+	public List<User> findAll() {
+		return userRepo.findAll();
 	}
+
+//	@Override
+//	public boolean exists(User user) {
+//		// returns true if user can be found by userName
+//		return userRepo.findByUserName(user.getUserName()) == null ? false : true;
+//	}
 }
