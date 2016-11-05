@@ -7,6 +7,8 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+//import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
 import cooksys.entity.User;
@@ -35,22 +37,33 @@ public class UserController {
 	}
 	
 	@PostMapping
-	public User putUser(@RequestBody User user) {
-		System.out.println("User is creating!!!!!*****************!!!!" + getUser(user).getUsername());
+	public User putUser(@RequestBody User user) throws NotAddedException {
+		System.out.println("User is creating!!!!!*****************!!!!" + user.getCredentials().getUsername());
 //		if(!userService.exists(user)){
-		  userService.add(user);
-		  return user;
+		
+		user.setId(null); // user id should not be in the input!
+		User returnUser = userService.add(user);
+		if (returnUser.getId() == null)
+			throw new NotAddedException("User was not added!");
+		return returnUser;
 //		}
 	}
 	
-//	@PostMapping
-//	public void add(@RequestBody Student student) {
-//		studentService.add(student);
-//	}
-//	
-//	@PutMapping("/{student}/skill/{skill}")
-//	public void addSkill(@PathVariable Student student, @PathVariable Skill skill) {
-//		studentService.addSkill(student, skill);
+//	@GetMapping("validate")
+//	public boolean usernameExists() {
+//		System.out.println("Seraching for username ............ Ivan ");
+//		return userService.findByUsername("Ivan") == null ? false : true;
 //	}
 	
+}
+@ResponseStatus
+class NotAddedException extends Exception {
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
+
+	public NotAddedException(String msg) {
+        super(msg);
+    }
 }

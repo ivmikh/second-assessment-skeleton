@@ -2,7 +2,6 @@ package cooksys.controller;
 
 import java.sql.Timestamp;
 import java.util.List;
-import java.util.Map;
 
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -10,8 +9,6 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import cooksys.component.TweetPost;
-import cooksys.entity.Credentials;
 import cooksys.entity.Tweet;
 import cooksys.entity.User;
 import cooksys.service.TweetService;
@@ -32,13 +29,12 @@ public class TweetController {
 	}
 
 	@PostMapping
-	public Tweet putTweet(@RequestBody Tweet tweet ) {
+	public TweetReturn putTweet(@RequestBody Tweet tweet ) {
 		System.out.println("Tweet is creating!!!!!*****************!!!!" );
-//		if(!userService.exists(user)){
-//		Tweet tweet = tweetService.getTweet(postTweet);
-		  tweetService.add(tweet);
-//		  return new TweetReturn(tweet);
-		  return tweet;
+		  
+		  TweetReturn tweetReturn = new TweetReturn(tweetService.add(tweet));
+		  return tweetReturn;
+//		  return tweet;
 //		}
 	}
 }
@@ -55,6 +51,39 @@ class TweetReturn {
 		this.posted = tweet.getTimestamp();
 		this.content = tweet.getContent();
 	}
+
+	public Long getId() {
+		return id;
+	}
+
+	public void setId(Long id) {
+		this.id = id;
+	}
+
+	public User getAuthor() {
+		return author;
+	}
+
+	public void setAuthor(User author) {
+		this.author = author;
+	}
+
+	public Timestamp getPosted() {
+		return posted;
+	}
+
+	public void setPosted(Timestamp posted) {
+		this.posted = posted;
+	}
+
+	public String getContent() {
+		return content;
+	}
+
+	public void setContent(String content) {
+		this.content = content;
+	}
+	
 }
 //{ // Tweet
 //	  id: 'integer'

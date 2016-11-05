@@ -6,9 +6,9 @@ import cooksys.entity.User;
 
 public interface UserService {
 //	User findById(Long id);
-//	User findByUserName(String userName);
+	User findByUsername(String username);
 	List<User> findAll();
 	
-	public void add(User user);
+	public User add(User user);
 //	public boolean exists(User user);
 }

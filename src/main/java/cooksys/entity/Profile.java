@@ -9,7 +9,7 @@ public class Profile {
 
 	@Id
 	@GeneratedValue
-	private Long profileId;
+	private Long id;
 	
 	private String firstName;  // optional
 	private String lastName;   // optional
@@ -20,10 +20,10 @@ public class Profile {
 	
 	
 	public Long getId() {
-		return profileId;
+		return id;
 	}
 	public void setId(Long id) {
-		this.profileId = id;
+		this.id = id;
 	}
 	
 	public String getFirstName() {

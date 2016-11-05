@@ -20,7 +20,7 @@ public class User {
 	@GeneratedValue
 //	@Column(columnDefinition = "serial")  //it has "bigint" type by default
 	private Long id;
-	
+	private boolean active;
 	private String username;
 	
 	@OneToOne (cascade = CascadeType.ALL)
@@ -29,8 +29,8 @@ public class User {
 	@OneToOne(cascade = CascadeType.ALL) //@MapsId
 	private Profile profile;
 	
-	@Column(insertable=true,updatable=false)
-	private Timestamp joined;
+////	@Column(insertable=true,updatable=false)
+//	private Timestamp joined;
 
 	@OneToMany
 	private List<Tweet> tweets;
@@ -43,6 +43,14 @@ public class User {
 		this.id = id;
 	}
 
+	public boolean isActive() {
+		return active;
+	}
+
+	public void setActive(boolean active) {
+		this.active = active;
+	}
+
 	public String getUsername() {
 		return username;
 	}
@@ -52,7 +60,7 @@ public class User {
 		this.username = getCredentials().getUsername();
 	}
 	
-	private Credentials getCredentials() {
+	public Credentials getCredentials() {
 		return credentials;
 	}
 
@@ -68,12 +76,16 @@ public class User {
 		this.profile = profile;
 	}
 	
-	  @PrePersist
-	  final void joined() {
-		this.joined = new Timestamp( (new Date()).getTime() );
-	  }
-	  
-	  public long getJoined() {
-		  return this.joined.getTime();
-	  }
+////	  @PrePersist
+////	  final void joined() {
+////		this.joined = new Timestamp( (new Date()).getTime() );
+////	  }
+//	  
+//	public void setJoined(Timestamp timestamp) {
+//		this.joined = timestamp;
+//	}
+//
+//	public long getJoined() {
+//		return this.joined.getTime();
+//	}
 }
