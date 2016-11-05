@@ -6,8 +6,8 @@ import org.springframework.data.jpa.repository.JpaRepository;
 
 import cooksys.entity.User;
 
-public interface UserRepository extends JpaRepository<User, Long> {
+public interface UserRepo extends JpaRepository<User, Long> {
 //	User findById(Long id);
-	User findByUsername(String userName);
+	User findByUsername(String username);
 	List<User> findAll();
 }

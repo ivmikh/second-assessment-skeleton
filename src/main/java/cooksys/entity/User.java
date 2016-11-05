@@ -1,6 +1,7 @@
 package cooksys.entity;
 
 import java.util.Date;
+import java.util.List;
 import java.sql.Timestamp;
 
 import javax.persistence.CascadeType;
@@ -8,6 +9,7 @@ import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
+import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 import javax.persistence.PrePersist;
 
@@ -30,6 +32,9 @@ public class User {
 	@Column(insertable=true,updatable=false)
 	private Timestamp joined;
 
+	@OneToMany
+	private List<Tweet> tweets;
+	
 	public Long getId() {
 		return id;
 	}
@@ -39,17 +44,13 @@ public class User {
 	}
 
 	public String getUsername() {
-//		return this.credentials.getUsername();
 		return username;
 	}
 
 	public void setUsername(String username) {
 //		this.username = username;
-//		this.username = credentials.getUsername();
 		this.username = getCredentials().getUsername();
 	}
-	
-	
 	
 	private Credentials getCredentials() {
 		return credentials;
@@ -75,6 +76,4 @@ public class User {
 	  public long getJoined() {
 		  return this.joined.getTime();
 	  }
-
-
 }

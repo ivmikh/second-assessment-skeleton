@@ -3,7 +3,7 @@ package cooksys.entity;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
-import javax.persistence.Transient;
+//import javax.persistence.Transient;
 
 @Entity
 public class Credentials {
@@ -11,7 +11,7 @@ public class Credentials {
 	@GeneratedValue
 	private Long id;
 	
-	@Transient
+//	@Transient
 	private String username;
 	private String password;
 	public Long getId() {

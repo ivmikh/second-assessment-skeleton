@@ -5,15 +5,15 @@ import java.util.List;
 import org.springframework.stereotype.Service;
 
 import cooksys.entity.User;
-import cooksys.repository.UserRepository;
+import cooksys.repository.UserRepo;
 import cooksys.service.UserService;
 
 @Service
 public class UserServiceImpl implements UserService{
 
-	UserRepository userRepo;
+	UserRepo userRepo;
 	
-	public UserServiceImpl(UserRepository userRepo) {
+	public UserServiceImpl(UserRepo userRepo) {
 		this.userRepo = userRepo;
 	}
 	
