@@ -4,11 +4,11 @@
 	<modelVersion>4.0.0</modelVersion>
 
 	<groupId>cooksys</groupId>
-	<artifactId>second_assesment</artifactId>
+	<artifactId>second-assessment</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
 	<packaging>jar</packaging>
 
-	<name>second_assesment</name>
+	<name>second-assessment</name>
 	<description>Social media data that resembles the conceptual model of Twitter</description>
 
 	<parent>
