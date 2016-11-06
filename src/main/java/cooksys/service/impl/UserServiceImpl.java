@@ -47,7 +47,7 @@ public class UserServiceImpl implements UserService{
 		String password = credentials.getPassword();
 		// Check for missing credentials:		
 		if(username == null || username.equals("") || password == null || password.equals("")){
-			return user;
+			return null;
 		}
 
 //		System.out.println("Cheking if user exists!!!**************************!!!" + username);
@@ -60,13 +60,13 @@ public class UserServiceImpl implements UserService{
 		   return userRepo.saveAndFlush(user);
 		} else if ( ! password.equals(dbUser.getCredentials().getPassword() ) ) { // if Password doesn't match:
 			System.out.println("Password doesn't match!          ********************! ");		
-			return user;
+			return null;
 		} else if (!dbUser.isActive()) { // if user not active
 			System.out.println("Restoring user!          ********************! ");
 			dbUser.setActive(true);
-			return dbUser;
+			return userRepo.saveAndFlush(dbUser);
 		} else {  // if exact active match
-			return user;
+			return null;
 		}
 		
 	}

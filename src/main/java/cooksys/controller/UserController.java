@@ -57,9 +57,9 @@ public class UserController {
 		System.out.println("User is creating!!!!!*****************!!!!" + user.getCredentials().getUsername());
 //		if(!userService.exists(user)){
 		
-		user.setId(null); // user id should not be in the input!
+//		user.setId(null); // user id should not be in the input!
 		User dbUser = userService.add(user);
-		if (dbUser.getId() == null)
+		if (dbUser == null)
 			throw new UserControllerException("User was not added!");
 		return dbUser;
 //		}
