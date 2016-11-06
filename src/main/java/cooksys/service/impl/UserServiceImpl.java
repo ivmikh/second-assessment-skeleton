@@ -35,6 +35,11 @@ public class UserServiceImpl implements UserService{
 	}
 	
 	@Override
+	public User findByUsernameAndActiveTrue(String username) {
+		return userRepo.findByUsernameAndActiveTrue(username);
+	}
+	
+	@Override
 	public User add(User user) {
 
 		Credentials credentials = user.getCredentials();
@@ -65,12 +70,25 @@ public class UserServiceImpl implements UserService{
 		}
 		
 	}
-
 	@Override
-	public List<User> findAll() {
-		return userRepo.findAll();
+	public User delete(User user) {
+		System.out.println("1: Deleting the user>>>>>>>>>>>>>>>>>><<<<<<<<");
+		User dbUser = userRepo.findByUsernameAndActiveTrue(user.getUsername());
+		if(dbUser == null || ! dbUser.getCredentials().getPassword().equals(user.getCredentials().getPassword()))
+			return null;
+		dbUser.setActive(false);
+		System.out.println("2: Deleting the user>>>>>>>>>>>>>>>>>><<<<<<<<");
+		userRepo.saveAndFlush(dbUser);
+		dbUser.setActive(true); // if one needs a user before its deletion
+		return dbUser;
+		
+	}
+	@Override
+	public List<User> findByActiveTrue() {
+		return userRepo.findByActiveTrue();
 	}
 
+	
 //	@Override
 //	public boolean exists(User user) {
 //		// returns true if user can be found by userName

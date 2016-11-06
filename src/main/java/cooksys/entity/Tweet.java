@@ -26,7 +26,6 @@ public class Tweet {
 	private Credentials credentials;
 
 	@ManyToOne
-	@JoinColumn
 	private User author;
 	
 	@Column(insertable=true,updatable=false)

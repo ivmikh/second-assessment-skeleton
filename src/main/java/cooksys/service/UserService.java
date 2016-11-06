@@ -7,8 +7,10 @@ import cooksys.entity.User;
 public interface UserService {
 //	User findById(Long id);
 	User findByUsername(String username);
-	List<User> findAll();
-	
-	public User add(User user);
+	User findByUsernameAndActiveTrue(String username);
+//	List<User> findAll();
+	List<User> findByActiveTrue();
+	User add(User user);
 //	public boolean exists(User user);
+	User delete(User user);
 }

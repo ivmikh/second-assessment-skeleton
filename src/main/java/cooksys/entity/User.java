@@ -32,8 +32,16 @@ public class User {
 ////	@Column(insertable=true,updatable=false)
 //	private Timestamp joined;
 
-	@OneToMany
+	@OneToMany(mappedBy = "author")
 	private List<Tweet> tweets;
+	
+	public User () {
+	}
+	
+	public User (Credentials credentails) {
+		this.credentials = credentails;
+		this.username = credentails.getUsername();
+	}
 	
 	public Long getId() {
 		return id;
@@ -56,8 +64,8 @@ public class User {
 	}
 
 	public void setUsername(String username) {
-//		this.username = username;
-		this.username = getCredentials().getUsername();
+		this.username = username;
+//		this.username = getCredentials().getUsername();
 	}
 	
 	public Credentials getCredentials() {
