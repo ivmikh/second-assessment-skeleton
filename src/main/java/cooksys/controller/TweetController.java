@@ -30,7 +30,8 @@ public class TweetController {
 	public List<Tweet> getTweets() {
 //		System.out.println("User ID is received!!!!!*****************!!!!");
 //		return tweetService.findAll();
-		return tweetService.findByActiveTrue();
+//		return tweetService.findByActiveTrue();
+		return tweetService.get();
 	}
 	
 	@GetMapping("/{id}")

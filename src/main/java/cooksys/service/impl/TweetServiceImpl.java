@@ -40,6 +40,11 @@ public class TweetServiceImpl implements TweetService{
 	}
 	
 	@Override
+	public List<Tweet> get() {
+		return tweetRepo.orderAllActive();
+	}
+	
+	@Override
 	public Tweet add(Tweet tweet) {
 		Credentials tweetCredentials = tweet.getCredentials();
 		String tweetUsername =tweetCredentials.getUsername();

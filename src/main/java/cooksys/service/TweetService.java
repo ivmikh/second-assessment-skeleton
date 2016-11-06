@@ -10,6 +10,8 @@ public interface TweetService {
 	List<Tweet> findByActiveTrue();
 	Tweet findByIdAndActiveTrue(Integer id);
 	
+	List<Tweet> get();
+	
 	public Tweet add(Tweet tweet);
 	public Tweet delete(Integer id, Credentials credentials);
 }
