@@ -22,6 +22,7 @@ public class Tweet {
 	@Id
 	@GeneratedValue
 	private Long id;
+	private boolean active;
 	@Transient
 	private Credentials credentials;
 
@@ -39,6 +40,13 @@ public class Tweet {
 	}
 	public void setId(Long id) {
 		this.id = id;
+	}
+	
+	public boolean isActive() {
+		return active;
+	}
+	public void setActive(boolean active) {
+		this.active = active;
 	}
 	public Credentials getCredentials() {
 		return credentials;

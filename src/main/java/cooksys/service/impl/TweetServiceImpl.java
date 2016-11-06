@@ -28,7 +28,17 @@ public class TweetServiceImpl implements TweetService{
 	public List<Tweet> findAll() {
 		return tweetRepo.findAll();
 	}
-
+	
+	@Override
+	public List<Tweet> findByActiveTrue() {
+		return tweetRepo.findByActiveTrue();
+	}
+	
+	@Override
+	public Tweet findByIdAndActiveTrue(Integer id) {
+		return tweetRepo.findByIdAndActiveTrue(id.longValue());
+	}
+	
 	@Override
 	public Tweet add(Tweet tweet) {
 		Credentials tweetCredentials = tweet.getCredentials();
@@ -40,9 +50,25 @@ public class TweetServiceImpl implements TweetService{
 		if (dbCredentials.getPassword().equals(tweetCredentials.getPassword() ) ) {
 			tweet.setCredentials(dbCredentials); // to set tweet credentials id (credentials may be redundant in tweet !).
 			tweet.setAuthor(dbUser);
+			tweet.setActive(true);
 			return tweetRepo.saveAndFlush(tweet);
 		} else {
 		    return tweet;
 		}
+	}
+	
+	@Override
+	public Tweet delete(Integer id, Credentials credentials) {
+		Long longId = id.longValue();
+		Tweet dbTweet = tweetRepo.findById(longId); 
+		if( dbTweet == null || ! credentials.equals( dbTweet.getAuthor().getCredentials() ) )
+			return null;
+			dbTweet.setActive(false);
+			String content = dbTweet.getContent();
+			dbTweet.setContent(""); // Really delete content (optionally).
+			tweetRepo.saveAndFlush(dbTweet);
+			dbTweet.setActive(true);
+			dbTweet.setContent(content);
+			return dbTweet;
 	}
 }

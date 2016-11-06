@@ -4,11 +4,15 @@ import java.sql.Timestamp;
 import java.util.List;
 
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
+import cooksys.entity.Credentials;
 import cooksys.entity.Tweet;
 import cooksys.entity.User;
 import cooksys.service.TweetService;
@@ -25,17 +29,36 @@ public class TweetController {
 	@GetMapping
 	public List<Tweet> getTweets() {
 //		System.out.println("User ID is received!!!!!*****************!!!!");
-		return tweetService.findAll();
+//		return tweetService.findAll();
+		return tweetService.findByActiveTrue();
+	}
+	
+	@GetMapping("/{id}")
+	public Tweet getTweet(@PathVariable Integer id) throws TweetControllerException {
+//		System.out.println("User ID is received!!!!!*****************!!!!");
+//		return tweetService.findAll();
+		Tweet dbTweet = tweetService.findByIdAndActiveTrue(id);
+		if(dbTweet == null)
+			throw new TweetControllerException("Tweet not fouund!");
+		return dbTweet;
 	}
 
 	@PostMapping
-	public TweetReturn putTweet(@RequestBody Tweet tweet ) {
+	public Tweet putTweet(@RequestBody Tweet tweet ) {
 		System.out.println("Tweet is creating!!!!!*****************!!!!" );
 		  
 		  TweetReturn tweetReturn = new TweetReturn(tweetService.add(tweet));
-		  return tweetReturn;
-//		  return tweet;
+//		  return tweetReturn;
+		  return tweet;
 //		}
+	}
+	
+	@RequestMapping(value = "/{id}", method = RequestMethod.DELETE)
+	public Tweet deleteUser(@PathVariable Integer id, @RequestBody Credentials credentials) throws TweetControllerException {
+		Tweet dbTweet = tweetService.delete(id, credentials);
+		if (dbTweet == null)
+			throw new TweetControllerException("Tweet cannot be deleted. Check tweet id and credentials: username and password!");
+		return dbTweet;
 	}
 }
 
@@ -85,11 +108,15 @@ class TweetReturn {
 	}
 	
 }
-//{ // Tweet
-//	  id: 'integer'
-//	  author: 'User',
-//	  posted: 'timestamp',
-//	  content?: 'string',
-//	  inReplyTo?: 'Tweet',
-//	  repostOf?: 'Tweet'
-//	}
+
+@ResponseStatus
+class TweetControllerException extends Exception {
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
+
+	public TweetControllerException(String msg) {
+        super(msg);
+    }
+}
