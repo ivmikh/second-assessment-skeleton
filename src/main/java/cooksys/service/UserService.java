@@ -15,4 +15,5 @@ public interface UserService {
 	User add(UserEntity userEntity);
 	User delete(Credentials credentials);
 	boolean usernameExists(String username);
+	boolean usernameAvailable(String username);
 }

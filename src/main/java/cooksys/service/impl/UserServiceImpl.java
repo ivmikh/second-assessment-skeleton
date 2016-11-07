@@ -29,9 +29,13 @@ public class UserServiceImpl implements UserService{
 	
 	@Override
 	public boolean usernameExists(String username) {
-		return (userRepo.findByUsername(username) == null) ? false : true;
+		return (userRepo.findByUsernameAndActiveTrue(username) == null) ? false : true;
 	}
 	
+	@Override
+	public boolean usernameAvailable(String username) {
+		return (userRepo.findByUsername(username) == null) ? false : true;
+	}
 	
 	@Override
 	public User findByUsernameAndActiveTrue(String username) {
