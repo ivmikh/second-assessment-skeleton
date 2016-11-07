@@ -4,18 +4,13 @@ import java.sql.Timestamp;
 import java.util.Date;
 import java.util.List;
 
-import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
-import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
 import javax.persistence.PrePersist;
 import javax.persistence.PreUpdate;
-
-import org.hibernate.annotations.CollectionId;
-import org.hibernate.annotations.Type;
 
 @Entity
 public class Hashtag {
@@ -23,8 +18,11 @@ public class Hashtag {
 	@GeneratedValue
 	private Long id;
 	private String label;
+	@Column(insertable=true,updatable=false)
+	private Timestamp firstUsed;
+	
 	@Column(insertable=true,updatable=true)
-	private Timestamp timestamp;
+	private Timestamp lastUsed;
 	
 	@ManyToMany //(cascade = CascadeType.ALL)
 //	@JoinTable
@@ -46,12 +44,20 @@ public class Hashtag {
 		this.label = label;
 	}
 	
-	@PreUpdate
-	final void timestamp() {
-		this.timestamp = new Timestamp((new Date()).getTime());
+	@PrePersist
+	final void firstUsed() {
+		this.firstUsed = new Timestamp((new Date()).getTime());
 	}
-	public Timestamp getTimestamp() {
-		return timestamp;
+	public Timestamp getFirstUsed() {
+		return firstUsed;
+	}
+	
+	@PreUpdate
+	final void lastUsed() {
+		this.lastUsed = new Timestamp((new Date()).getTime());
+	}
+	public Timestamp getLastUsed() {
+		return lastUsed;
 	}
 	
 	public List<Tweet> getTweets() {

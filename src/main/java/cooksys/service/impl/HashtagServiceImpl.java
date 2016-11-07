@@ -23,8 +23,14 @@ public class HashtagServiceImpl implements HashtagService{
 	
 	@Override
 	public List<Hashtag> parseAndPut(String content) {
+		List<Hashtag> listHashtag = new ArrayList<Hashtag>();
+		Hashtag hashtag = new Hashtag();
+		for (String label : parse(content) ) {
+			hashtag.setLabel(label);
+			listHashtag.add(hashtag);
+		}
 		//To do
-		return new ArrayList<Hashtag>();
+		return listHashtag;
 	}
 	
 	private Set<String> parse(String content) {
