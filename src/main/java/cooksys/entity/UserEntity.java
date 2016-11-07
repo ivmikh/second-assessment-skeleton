@@ -13,8 +13,10 @@ import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 import javax.persistence.PrePersist;
 
+import cooksys.component.Profile;
+
 @Entity
-public class User {
+public class UserEntity {
 	
 	@Id
 	@GeneratedValue
@@ -27,21 +29,22 @@ public class User {
 	private Credentials credentials;
 	
 	@OneToOne(cascade = CascadeType.ALL) //@MapsId
-	private Profile profile;
+	private ProfileEntity profile;
 	
-////	@Column(insertable=true,updatable=false)
-//	private Timestamp joined;
+	@Column(insertable=true,updatable=false)
+	private Timestamp joined;
 
 	@OneToMany(mappedBy = "author")
-	private List<Tweet> tweets;
+	private List<TweetEntity> tweets;
 	
-	public User () {
+	public UserEntity () {
 	}
 	
-	public User (Credentials credentails) {
-		this.credentials = credentails;
-		this.username = credentails.getUsername();
-	}
+//	public UserEntity (Credentials credentails, ProfileEntity profile) {
+//		this.credentials = credentails;
+//		this.username = credentails.getUsername();
+//		this.profile = profile;
+//	}
 	
 	public Long getId() {
 		return id;
@@ -76,24 +79,24 @@ public class User {
 		this.credentials = credentials;
 	}
 
-	public Profile getProfile() {
+	public ProfileEntity getProfile() {
 		return this.profile;
 	}
 
-	public void setProfile(Profile profile) {
+	public void setProfile(ProfileEntity profile) {
 		this.profile = profile;
 	}
 	
-////	  @PrePersist
-////	  final void joined() {
-////		this.joined = new Timestamp( (new Date()).getTime() );
-////	  }
+	  @PrePersist
+	  final void joined() {
+		this.joined = new Timestamp( (new Date()).getTime() );
+	  }
 //	  
 //	public void setJoined(Timestamp timestamp) {
 //		this.joined = timestamp;
 //	}
 //
-//	public long getJoined() {
-//		return this.joined.getTime();
-//	}
+	public Timestamp getJoined() {
+		return this.joined;
+	}
 }

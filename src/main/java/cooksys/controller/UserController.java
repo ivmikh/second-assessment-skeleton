@@ -12,8 +12,9 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
+import cooksys.component.User;
 import cooksys.entity.Credentials;
-import cooksys.entity.User;
+import cooksys.entity.UserEntity;
 //import cooksys.entity.UserTable;
 import cooksys.service.UserService;
 
@@ -43,22 +44,17 @@ public class UserController {
 	
 	@RequestMapping(value = "/@{username}", method = RequestMethod.DELETE)
 	public User deleteUser(@PathVariable String username, @RequestBody Credentials credentials) throws UserControllerException {
-		System.out.println("Username is received to delete the user!!!!!*****************!!!!");
-		User user = new User(credentials);
-		if( ! username.equals( credentials.getUsername() ) ) 
-			throw new UserControllerException("Usernames don't match!");
-		User dbUser = userService.delete(user);
+		if( username == null || ! username.equals( credentials.getUsername() ) ) 
+			throw new UserControllerException("Username doesn't match!");
+		User dbUser = userService.delete(credentials);
 		if (dbUser == null)
 			throw new UserControllerException("User doesn't exist. Check credentials: username and password!");
 		return dbUser;
 	}
+	
 	@PostMapping
-	public User putUser(@RequestBody User user) throws UserControllerException {
-		System.out.println("User is creating!!!!!*****************!!!!" + user.getCredentials().getUsername());
-//		if(!userService.exists(user)){
-		
-//		user.setId(null); // user id should not be in the input!
-		User dbUser = userService.add(user);
+	public User putUser(@RequestBody UserEntity userEntity) throws UserControllerException {
+		User dbUser = userService.add(userEntity);
 		if (dbUser == null)
 			throw new UserControllerException("User was not added!");
 		return dbUser;
@@ -83,3 +79,7 @@ class UserControllerException extends Exception {
         super(msg);
     }
 }
+//class UserPostRequest {
+//	  public Credentials credentials;
+//	  public ProfileEntity profile;
+//}

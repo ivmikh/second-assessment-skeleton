@@ -1,12 +1,14 @@
 package cooksys.service.impl;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.stereotype.Service;
 
+import cooksys.component.Tweet;
 import cooksys.entity.Credentials;
-import cooksys.entity.Tweet;
-import cooksys.entity.User;
+import cooksys.entity.TweetEntity;
+import cooksys.entity.UserEntity;
 import cooksys.repository.CredentialsRepo;
 import cooksys.repository.TweetRepo;
 import cooksys.repository.UserRepo;
@@ -23,57 +25,45 @@ public class TweetServiceImpl implements TweetService{
 		this.userRepo = userRepo;
 		this.credentialsRepo = credentialsRepo;
 	}
-
-	@Override
-	public List<Tweet> findAll() {
-		return tweetRepo.findAll();
-	}
-	
-	@Override
-	public List<Tweet> findByActiveTrue() {
-		return tweetRepo.findByActiveTrue();
-	}
 	
 	@Override
 	public Tweet findByIdAndActiveTrue(Integer id) {
-		return tweetRepo.findByIdAndActiveTrue(id.longValue());
+		TweetEntity tweetEntity = tweetRepo.findByIdAndActiveTrue(id.longValue());
+		return (tweetEntity == null) ? null : new Tweet(tweetEntity);
 	}
 	
 	@Override
 	public List<Tweet> get() {
-		return tweetRepo.orderAllActive();
+		List<Tweet> listTweet = new ArrayList<>();
+		for (TweetEntity tweetEntity: tweetRepo.orderAllActive()){
+			listTweet.add( new Tweet(tweetEntity) );
+		}
+		return listTweet;
 	}
 	
 	@Override
-	public Tweet add(Tweet tweet) {
-		Credentials tweetCredentials = tweet.getCredentials();
-		String tweetUsername =tweetCredentials.getUsername();
-		User dbUser = userRepo.findByUsername(tweetUsername); 
+	public Tweet add(String content, Credentials credentials) {
+		String tweetUsername =credentials.getUsername();
+		UserEntity dbUser = userRepo.findByUsernameAndActiveTrue(tweetUsername); 
+		if(dbUser == null)
+			return null;
 		Credentials dbCredentials = dbUser.getCredentials();
-//		User dbUser = userRepo.findByCredentials(tweetCredentials);  // cannot do this for credentials with unknown id ?
-		System.out.println("Found User with password " + dbCredentials.getPassword() + " !!!!!!!!!**********!!!!!!!!!!!!  ? " + tweetCredentials.getPassword() );
-		if (dbCredentials.getPassword().equals(tweetCredentials.getPassword() ) ) {
-			tweet.setCredentials(dbCredentials); // to set tweet credentials id (credentials may be redundant in tweet !).
-			tweet.setAuthor(dbUser);
-			tweet.setActive(true);
-			return tweetRepo.saveAndFlush(tweet);
-		} else {
-		    return tweet;
-		}
+		if ( ! dbCredentials.equals(credentials) )
+			return null;;
+		return new Tweet(tweetRepo.saveAndFlush(new TweetEntity(dbUser, content)));
+
 	}
 	
 	@Override
 	public Tweet delete(Integer id, Credentials credentials) {
 		Long longId = id.longValue();
-		Tweet dbTweet = tweetRepo.findById(longId); 
-		if( dbTweet == null || ! credentials.equals( dbTweet.getAuthor().getCredentials() ) )
+		TweetEntity tweetEntity = tweetRepo.findById(longId); 
+		if (tweetEntity == null || !credentials.equals(tweetEntity.getAuthor().getCredentials()))
 			return null;
-			dbTweet.setActive(false);
-			String content = dbTweet.getContent();
-			dbTweet.setContent(""); // Really delete content (optionally).
-			tweetRepo.saveAndFlush(dbTweet);
-			dbTweet.setActive(true);
-			dbTweet.setContent(content);
-			return dbTweet;
+		Tweet tweet = new Tweet(tweetEntity);
+		tweetEntity.setActive(false);
+		tweetEntity.setContent(""); // Really delete content (optionally).
+		tweetRepo.saveAndFlush(tweetEntity);
+		return tweet;
 	}
 }

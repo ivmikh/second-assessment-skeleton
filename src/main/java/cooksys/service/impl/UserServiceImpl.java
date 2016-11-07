@@ -1,13 +1,15 @@
 package cooksys.service.impl;
 
 import java.sql.Timestamp;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
 import org.springframework.stereotype.Service;
 
+import cooksys.component.User;
 import cooksys.entity.Credentials;
-import cooksys.entity.User;
+import cooksys.entity.UserEntity;
 import cooksys.repository.UserRepo;
 import cooksys.service.UserService;
 
@@ -25,67 +27,63 @@ public class UserServiceImpl implements UserService{
 //		return userRepo.findById(id);
 //	}
 	
-//	public boolean exists(User user) {
-//		return true;
-//	}
-	
 	@Override
-	public User findByUsername(String username) {
-		return userRepo.findByUsername(username);
+	public boolean usernameExists(String username) {
+		return (userRepo.findByUsername(username) == null) ? false : true;
 	}
+	
 	
 	@Override
 	public User findByUsernameAndActiveTrue(String username) {
-		return userRepo.findByUsernameAndActiveTrue(username);
+		UserEntity userEntity = userRepo.findByUsernameAndActiveTrue(username);
+		return (userEntity == null) ? null : new User(userEntity);
 	}
 	
 	@Override
-	public User add(User user) {
-
-		Credentials credentials = user.getCredentials();
+	public User add(UserEntity userEntity) {
+		// Check for missing credentials:
+		Credentials credentials = userEntity.getCredentials();
+		if(credentials == null)
+			return null;
 		String username = credentials.getUsername();
-		String password = credentials.getPassword();
-		// Check for missing credentials:		
+		String password = credentials.getPassword();		
 		if(username == null || username.equals("") || password == null || password.equals("")){
 			return null;
 		}
-
-//		System.out.println("Cheking if user exists!!!**************************!!!" + username);
-		User dbUser = userRepo.findByUsername(username);
+		UserEntity dbUser = userRepo.findByUsername(username);
 		if( dbUser == null ) { // if User never existed:
-			System.out.println("Creating a new user!!!**************************!!!" + username);
-		   user.setUsername(username);
-		   user.setActive(true);
+		   userEntity.setActive(true);
+		   userEntity.setUsername(username);
 //		   user.setJoined(new Timestamp( (new Date()).getTime() ) );
-		   return userRepo.saveAndFlush(user);
-		} else if ( ! password.equals(dbUser.getCredentials().getPassword() ) ) { // if Password doesn't match:
-			System.out.println("Password doesn't match!          ********************! ");		
+		   return new User( userRepo.saveAndFlush(userEntity) );
+		} else if ( ! password.equals(dbUser.getCredentials().getPassword() ) ) { // if Password doesn't match:	
 			return null;
 		} else if (!dbUser.isActive()) { // if user not active
-			System.out.println("Restoring user!          ********************! ");
 			dbUser.setActive(true);
-			return userRepo.saveAndFlush(dbUser);
+			return new User( userRepo.saveAndFlush(dbUser) );
 		} else {  // if exact active match
 			return null;
 		}
 		
 	}
 	@Override
-	public User delete(User user) {
-		System.out.println("1: Deleting the user>>>>>>>>>>>>>>>>>><<<<<<<<");
-		User dbUser = userRepo.findByUsernameAndActiveTrue(user.getUsername());
-		if(dbUser == null || ! dbUser.getCredentials().getPassword().equals(user.getCredentials().getPassword()))
+	public User delete(Credentials credentials) {
+		UserEntity userEntity = userRepo.findByUsernameAndActiveTrue(credentials.getUsername());
+		if(userEntity == null || ! userEntity.getCredentials().getPassword().equals(credentials.getPassword()))
 			return null;
-		dbUser.setActive(false);
-		System.out.println("2: Deleting the user>>>>>>>>>>>>>>>>>><<<<<<<<");
-		userRepo.saveAndFlush(dbUser);
-		dbUser.setActive(true); // if one needs a user before its deletion
-		return dbUser;
+		User user = new User(userEntity);
+		userEntity.setActive(false);
+		userRepo.saveAndFlush(userEntity);
+		return user;
 		
 	}
 	@Override
 	public List<User> findByActiveTrue() {
-		return userRepo.findByActiveTrue();
+		List<User> listUser = new ArrayList<>();
+		for (UserEntity userEntity: userRepo.findByActiveTrue()){
+			listUser.add( new User(userEntity) );
+		}
+		return listUser;
 	}
 
 	

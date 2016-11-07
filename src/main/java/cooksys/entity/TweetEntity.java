@@ -2,6 +2,7 @@ package cooksys.entity;
 
 import java.sql.Timestamp;
 import java.util.Date;
+import java.util.List;
 
 import javax.persistence.Column;
 
@@ -12,28 +13,40 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
+import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 import javax.persistence.PrePersist;
 import javax.persistence.Transient;
 
 @Entity
-public class Tweet {
+public class TweetEntity {
 
 	@Id
 	@GeneratedValue
 	private Long id;
 	private boolean active;
-	@Transient
-	private Credentials credentials;
+//	@Transient
+//	private Credentials credentials;
 
 	@ManyToOne
-	private User author;
+	private UserEntity author;
 	
 	@Column(insertable=true,updatable=false)
 	private Timestamp timestamp;
 	private String content;   // optional
 //	private Tweet inReplyTo;  // optional
 //	private Tweet repostOf;   // optional
+	
+	@ManyToMany(mappedBy = "tweets")
+	private List<Hashtag> hashtags;
+	
+	public TweetEntity() { }
+	
+	public TweetEntity(UserEntity author, String content) {
+		this.author = author;
+		this.content = content;
+		this.active = true;
+	}
 	
 	public Long getId() {
 		return id;
@@ -48,17 +61,17 @@ public class Tweet {
 	public void setActive(boolean active) {
 		this.active = active;
 	}
-	public Credentials getCredentials() {
-		return credentials;
-	}
-	public void setCredentials(Credentials credentials) {
-		this.credentials = credentials;
-	}
+//	public Credentials getCredentials() {
+//		return credentials;
+//	}
+//	public void setCredentials(Credentials credentials) {
+//		this.credentials = credentials;
+//	}
 	
-	public User getAuthor() {
+	public UserEntity getAuthor() {
 		return author;
 	}
-	public void setAuthor(User author) {
+	public void setAuthor(UserEntity author) {
 		this.author = author;
 	}
 
