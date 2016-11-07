@@ -12,8 +12,9 @@ public interface UserService {
 	UserObj findByUsernameAndActiveTrue(String username);
 //	List<User> findAll();
 	List<UserObj> findByActiveTrue();
-	UserObj add(User userEntity);
+	UserObj add(User user);
 	UserObj delete(Credentials credentials);
+	UserObj patch(User user);
 	boolean usernameExists(String username);
 	boolean usernameAvailable(String username);
 }

@@ -68,6 +68,25 @@ public class UserServiceImpl implements UserService{
 		} else {  // if exact active match
 			return null;
 		}
+	}
+		
+		@Override
+		public UserObj patch(User user) {
+			// Check for missing credentials:
+			Credentials credentials = user.getCredentials();
+			if(credentials == null)
+				return null;
+			String username = credentials.getUsername();
+			String password = credentials.getPassword();		
+			if(username == null || username.equals("") || password == null || password.equals("")){
+				return null;
+			}
+			User dbUser = userRepo.findByUsername(username);
+			if( dbUser == null || ! password.equals(dbUser.getCredentials().getPassword() ) || !dbUser.isActive()  )  // if User never existed:
+			   return null;
+			dbUser.setProfile(user.getProfile());
+			return new UserObj(userRepo.saveAndFlush(dbUser));
+			
 		
 	}
 	@Override

@@ -52,20 +52,24 @@ public class UserController {
 		return dbUser;
 	}
 	
+	@RequestMapping(value = "/@{username}", method = RequestMethod.PATCH)
+	public UserObj patchUser(@PathVariable String username, @RequestBody User user) throws UserControllerException {
+		if( username == null || ! username.equals( user.getCredentials().getUsername() ) ) 
+			throw new UserControllerException("Username doesn't match!");
+		UserObj dbUser = userService.patch(user);
+		if (dbUser == null)
+			throw new UserControllerException("User doesn't exist. Check credentials: username and password!");
+		return dbUser;
+	}
+	
 	@PostMapping
 	public UserObj putUser(@RequestBody User userEntity) throws UserControllerException {
 		UserObj dbUser = userService.add(userEntity);
 		if (dbUser == null)
 			throw new UserControllerException("User was not added!");
 		return dbUser;
-//		}
 	}
 	
-//	@GetMapping("validate")
-//	public boolean usernameExists() {
-//		System.out.println("Seraching for username ............ Ivan ");
-//		return userService.findByUsername("Ivan") == null ? false : true;
-//	}
 	
 }
 @ResponseStatus
