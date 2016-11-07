@@ -12,9 +12,9 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
-import cooksys.component.User;
+import cooksys.component.UserObj;
 import cooksys.entity.Credentials;
-import cooksys.entity.UserEntity;
+import cooksys.entity.User;
 //import cooksys.entity.UserTable;
 import cooksys.service.UserService;
 
@@ -28,33 +28,33 @@ public class UserController {
 	}
 	
 	@GetMapping
-	public List<User> getUsers() {
+	public List<UserObj> getUsers() {
 //		System.out.println("User ID is received!!!!!*****************!!!!");
 		return userService.findByActiveTrue();
 	}
 	
 	@GetMapping("/@{username}")
-	public User getUser(@PathVariable String username) throws UserControllerException {
+	public UserObj getUser(@PathVariable String username) throws UserControllerException {
 //		System.out.println("Username is received!!!!!*****************!!!!");
-		User dbUser = userService.findByUsernameAndActiveTrue(username);
+		UserObj dbUser = userService.findByUsernameAndActiveTrue(username);
 		if (dbUser == null)
 			throw new UserControllerException("User was not found!");
 		return dbUser;
 	}
 	
 	@RequestMapping(value = "/@{username}", method = RequestMethod.DELETE)
-	public User deleteUser(@PathVariable String username, @RequestBody Credentials credentials) throws UserControllerException {
+	public UserObj deleteUser(@PathVariable String username, @RequestBody Credentials credentials) throws UserControllerException {
 		if( username == null || ! username.equals( credentials.getUsername() ) ) 
 			throw new UserControllerException("Username doesn't match!");
-		User dbUser = userService.delete(credentials);
+		UserObj dbUser = userService.delete(credentials);
 		if (dbUser == null)
 			throw new UserControllerException("User doesn't exist. Check credentials: username and password!");
 		return dbUser;
 	}
 	
 	@PostMapping
-	public User putUser(@RequestBody UserEntity userEntity) throws UserControllerException {
-		User dbUser = userService.add(userEntity);
+	public UserObj putUser(@RequestBody User userEntity) throws UserControllerException {
+		UserObj dbUser = userService.add(userEntity);
 		if (dbUser == null)
 			throw new UserControllerException("User was not added!");
 		return dbUser;

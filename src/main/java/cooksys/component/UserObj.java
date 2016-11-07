@@ -2,15 +2,15 @@ package cooksys.component;
 
 import java.sql.Timestamp;
 
-import cooksys.entity.UserEntity;
+import cooksys.entity.User;
 
-public class User {
+public class UserObj {
 	String username;
-	Profile profile;
+	ProfileObj profile;
 	Timestamp joined; // long
- public User(UserEntity user) {
+ public UserObj(User user) {
 	 this.username = user.getUsername();
-	 this.profile = new Profile( user.getProfile() );
+	 this.profile = new ProfileObj( user.getProfile() );
 	 this.joined = user.getJoined(); //.getTime();
  }
 public String getUsername() {
@@ -19,10 +19,10 @@ public String getUsername() {
 public void setUsername(String username) {
 	this.username = username;
 }
-public Profile getProfile() {
+public ProfileObj getProfile() {
 	return profile;
 }
-public void setProfile(Profile profile) {
+public void setProfile(ProfileObj profile) {
 	this.profile = profile;
 }
 public Timestamp getJoined() {

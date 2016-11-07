@@ -1,13 +1,13 @@
 package cooksys.component;
 
-import cooksys.entity.ProfileEntity;
+import cooksys.entity.Profile;
 
-public class Profile {
+public class ProfileObj {
  String firstName;
  String lastName;
  String email;
  String phone;
- public Profile(ProfileEntity profileEntity) {
+ public ProfileObj(Profile profileEntity) {
 	 this.firstName = profileEntity.getFirstName();
 	 this.lastName = profileEntity.getLastName();
 	 this.email = profileEntity.getEmail();

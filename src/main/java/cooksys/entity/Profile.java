@@ -5,7 +5,7 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 
 @Entity
-public class ProfileEntity {
+public class Profile {
 
 	@Id
 	@GeneratedValue

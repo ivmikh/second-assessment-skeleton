@@ -2,19 +2,19 @@ package cooksys.component;
 
 import java.sql.Timestamp;
 
-import cooksys.entity.TweetEntity;
+import cooksys.entity.Tweet;
 
-public class Tweet {
+public class TweetObj {
 	Integer id;
-	User author;
+	UserObj author;
 	Timestamp posted;
 	String content; // optional
 //	Tweet inReplyTo; // optional
 //	Tweet repostOf; // optional
 	
-	public Tweet(TweetEntity tweetEntity){
+	public TweetObj(Tweet tweetEntity){
 		this.id = tweetEntity.getId().intValue();
-		this.author = new User(tweetEntity.getAuthor());
+		this.author = new UserObj(tweetEntity.getAuthor());
 		this.posted = tweetEntity.getTimestamp();
 		this.content = tweetEntity.getContent();
 //		this.inReplyTo = tweetEntity.
@@ -28,11 +28,11 @@ public class Tweet {
 		this.id = id;
 	}
 
-	public User getAuthor() {
+	public UserObj getAuthor() {
 		return author;
 	}
 
-	public void setAuthor(User author) {
+	public void setAuthor(UserObj author) {
 		this.author = author;
 	}
 

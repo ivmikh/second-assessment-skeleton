@@ -5,14 +5,14 @@ import java.util.List;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import cooksys.entity.Credentials;
-import cooksys.entity.UserEntity;
+import cooksys.entity.User;
 
-public interface UserRepo extends JpaRepository<UserEntity, Long> {
+public interface UserRepo extends JpaRepository<User, Long> {
 //	User findById(Long id);
-	UserEntity findByUsername(String username);
-	UserEntity findByUsernameAndActiveTrue(String username);
-	UserEntity findByCredentials(Credentials credentials);
-	UserEntity findByCredentialsAndActiveTrue(Credentials credentials);
-	List<UserEntity> findAll();
-	List<UserEntity> findByActiveTrue();
+	User findByUsername(String username);
+	User findByUsernameAndActiveTrue(String username);
+	User findByCredentials(Credentials credentials);
+	User findByCredentialsAndActiveTrue(Credentials credentials);
+	List<User> findAll();
+	List<User> findByActiveTrue();
 }

@@ -19,7 +19,7 @@ import javax.persistence.PrePersist;
 import javax.persistence.Transient;
 
 @Entity
-public class TweetEntity {
+public class Tweet {
 
 	@Id
 	@GeneratedValue
@@ -29,7 +29,7 @@ public class TweetEntity {
 //	private Credentials credentials;
 
 	@ManyToOne
-	private UserEntity author;
+	private User author;
 	
 	@Column(insertable=true,updatable=false)
 	private Timestamp timestamp;
@@ -40,9 +40,9 @@ public class TweetEntity {
 	@ManyToMany(mappedBy = "tweets")
 	private List<Hashtag> hashtags;
 	
-	public TweetEntity() { }
+	public Tweet() { }
 	
-	public TweetEntity(UserEntity author, String content) {
+	public Tweet(User author, String content) {
 		this.author = author;
 		this.content = content;
 		this.active = true;
@@ -68,10 +68,10 @@ public class TweetEntity {
 //		this.credentials = credentials;
 //	}
 	
-	public UserEntity getAuthor() {
+	public User getAuthor() {
 		return author;
 	}
-	public void setAuthor(UserEntity author) {
+	public void setAuthor(User author) {
 		this.author = author;
 	}
 

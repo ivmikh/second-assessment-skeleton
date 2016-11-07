@@ -5,10 +5,10 @@ import java.util.List;
 
 import org.springframework.stereotype.Service;
 
-import cooksys.component.Tweet;
+import cooksys.component.TweetObj;
 import cooksys.entity.Credentials;
-import cooksys.entity.TweetEntity;
-import cooksys.entity.UserEntity;
+import cooksys.entity.Tweet;
+import cooksys.entity.User;
 import cooksys.repository.CredentialsRepo;
 import cooksys.repository.TweetRepo;
 import cooksys.repository.UserRepo;
@@ -27,40 +27,40 @@ public class TweetServiceImpl implements TweetService{
 	}
 	
 	@Override
-	public Tweet findByIdAndActiveTrue(Integer id) {
-		TweetEntity tweetEntity = tweetRepo.findByIdAndActiveTrue(id.longValue());
-		return (tweetEntity == null) ? null : new Tweet(tweetEntity);
+	public TweetObj findByIdAndActiveTrue(Integer id) {
+		Tweet tweetEntity = tweetRepo.findByIdAndActiveTrue(id.longValue());
+		return (tweetEntity == null) ? null : new TweetObj(tweetEntity);
 	}
 	
 	@Override
-	public List<Tweet> get() {
-		List<Tweet> listTweet = new ArrayList<>();
-		for (TweetEntity tweetEntity: tweetRepo.orderAllActive()){
-			listTweet.add( new Tweet(tweetEntity) );
+	public List<TweetObj> get() {
+		List<TweetObj> listTweet = new ArrayList<>();
+		for (Tweet tweetEntity: tweetRepo.orderAllActive()){
+			listTweet.add( new TweetObj(tweetEntity) );
 		}
 		return listTweet;
 	}
 	
 	@Override
-	public Tweet add(String content, Credentials credentials) {
+	public TweetObj add(String content, Credentials credentials) {
 		String tweetUsername =credentials.getUsername();
-		UserEntity dbUser = userRepo.findByUsernameAndActiveTrue(tweetUsername); 
+		User dbUser = userRepo.findByUsernameAndActiveTrue(tweetUsername); 
 		if(dbUser == null)
 			return null;
 		Credentials dbCredentials = dbUser.getCredentials();
 		if ( ! dbCredentials.equals(credentials) )
 			return null;;
-		return new Tweet(tweetRepo.saveAndFlush(new TweetEntity(dbUser, content)));
+		return new TweetObj(tweetRepo.saveAndFlush(new Tweet(dbUser, content)));
 
 	}
 	
 	@Override
-	public Tweet delete(Integer id, Credentials credentials) {
+	public TweetObj delete(Integer id, Credentials credentials) {
 		Long longId = id.longValue();
-		TweetEntity tweetEntity = tweetRepo.findById(longId); 
+		Tweet tweetEntity = tweetRepo.findById(longId); 
 		if (tweetEntity == null || !credentials.equals(tweetEntity.getAuthor().getCredentials()))
 			return null;
-		Tweet tweet = new Tweet(tweetEntity);
+		TweetObj tweet = new TweetObj(tweetEntity);
 		tweetEntity.setActive(false);
 		tweetEntity.setContent(""); // Really delete content (optionally).
 		tweetRepo.saveAndFlush(tweetEntity);

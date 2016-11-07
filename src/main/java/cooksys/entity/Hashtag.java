@@ -28,7 +28,7 @@ public class Hashtag {
 	
 	@ManyToMany //(cascade = CascadeType.ALL)
 //	@JoinTable
-	private List<TweetEntity> tweets;
+	private List<Tweet> tweets;
 
 	public Long getId() {
 		return id;
@@ -54,11 +54,11 @@ public class Hashtag {
 		return timestamp;
 	}
 	
-	public List<TweetEntity> getTweets() {
+	public List<Tweet> getTweets() {
 		return tweets;
 	}
 
-	public void setTweets(List<TweetEntity> tweets) {
+	public void setTweets(List<Tweet> tweets) {
 		this.tweets = tweets;
 	}
 	

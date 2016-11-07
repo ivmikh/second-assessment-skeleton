@@ -13,10 +13,8 @@ import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 import javax.persistence.PrePersist;
 
-import cooksys.component.Profile;
-
 @Entity
-public class UserEntity {
+public class User {
 	
 	@Id
 	@GeneratedValue
@@ -29,15 +27,15 @@ public class UserEntity {
 	private Credentials credentials;
 	
 	@OneToOne(cascade = CascadeType.ALL) //@MapsId
-	private ProfileEntity profile;
+	private Profile profile;
 	
 	@Column(insertable=true,updatable=false)
 	private Timestamp joined;
 
 	@OneToMany(mappedBy = "author")
-	private List<TweetEntity> tweets;
+	private List<Tweet> tweets;
 	
-	public UserEntity () {
+	public User () {
 	}
 	
 //	public UserEntity (Credentials credentails, ProfileEntity profile) {
@@ -68,7 +66,6 @@ public class UserEntity {
 
 	public void setUsername(String username) {
 		this.username = username;
-//		this.username = getCredentials().getUsername();
 	}
 	
 	public Credentials getCredentials() {
@@ -79,11 +76,11 @@ public class UserEntity {
 		this.credentials = credentials;
 	}
 
-	public ProfileEntity getProfile() {
+	public Profile getProfile() {
 		return this.profile;
 	}
 
-	public void setProfile(ProfileEntity profile) {
+	public void setProfile(Profile profile) {
 		this.profile = profile;
 	}
 	
@@ -91,11 +88,7 @@ public class UserEntity {
 	  final void joined() {
 		this.joined = new Timestamp( (new Date()).getTime() );
 	  }
-//	  
-//	public void setJoined(Timestamp timestamp) {
-//		this.joined = timestamp;
-//	}
-//
+
 	public Timestamp getJoined() {
 		return this.joined;
 	}

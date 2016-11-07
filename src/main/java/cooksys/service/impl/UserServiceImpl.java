@@ -7,9 +7,9 @@ import java.util.List;
 
 import org.springframework.stereotype.Service;
 
-import cooksys.component.User;
+import cooksys.component.UserObj;
 import cooksys.entity.Credentials;
-import cooksys.entity.UserEntity;
+import cooksys.entity.User;
 import cooksys.repository.UserRepo;
 import cooksys.service.UserService;
 
@@ -38,13 +38,13 @@ public class UserServiceImpl implements UserService{
 	}
 	
 	@Override
-	public User findByUsernameAndActiveTrue(String username) {
-		UserEntity userEntity = userRepo.findByUsernameAndActiveTrue(username);
-		return (userEntity == null) ? null : new User(userEntity);
+	public UserObj findByUsernameAndActiveTrue(String username) {
+		User userEntity = userRepo.findByUsernameAndActiveTrue(username);
+		return (userEntity == null) ? null : new UserObj(userEntity);
 	}
 	
 	@Override
-	public User add(UserEntity userEntity) {
+	public UserObj add(User userEntity) {
 		// Check for missing credentials:
 		Credentials credentials = userEntity.getCredentials();
 		if(credentials == null)
@@ -54,38 +54,38 @@ public class UserServiceImpl implements UserService{
 		if(username == null || username.equals("") || password == null || password.equals("")){
 			return null;
 		}
-		UserEntity dbUser = userRepo.findByUsername(username);
+		User dbUser = userRepo.findByUsername(username);
 		if( dbUser == null ) { // if User never existed:
 		   userEntity.setActive(true);
 		   userEntity.setUsername(username);
 //		   user.setJoined(new Timestamp( (new Date()).getTime() ) );
-		   return new User( userRepo.saveAndFlush(userEntity) );
+		   return new UserObj( userRepo.saveAndFlush(userEntity) );
 		} else if ( ! password.equals(dbUser.getCredentials().getPassword() ) ) { // if Password doesn't match:	
 			return null;
 		} else if (!dbUser.isActive()) { // if user not active
 			dbUser.setActive(true);
-			return new User( userRepo.saveAndFlush(dbUser) );
+			return new UserObj( userRepo.saveAndFlush(dbUser) );
 		} else {  // if exact active match
 			return null;
 		}
 		
 	}
 	@Override
-	public User delete(Credentials credentials) {
-		UserEntity userEntity = userRepo.findByUsernameAndActiveTrue(credentials.getUsername());
+	public UserObj delete(Credentials credentials) {
+		User userEntity = userRepo.findByUsernameAndActiveTrue(credentials.getUsername());
 		if(userEntity == null || ! userEntity.getCredentials().getPassword().equals(credentials.getPassword()))
 			return null;
-		User user = new User(userEntity);
+		UserObj user = new UserObj(userEntity);
 		userEntity.setActive(false);
 		userRepo.saveAndFlush(userEntity);
 		return user;
 		
 	}
 	@Override
-	public List<User> findByActiveTrue() {
-		List<User> listUser = new ArrayList<>();
-		for (UserEntity userEntity: userRepo.findByActiveTrue()){
-			listUser.add( new User(userEntity) );
+	public List<UserObj> findByActiveTrue() {
+		List<UserObj> listUser = new ArrayList<>();
+		for (User userEntity: userRepo.findByActiveTrue()){
+			listUser.add( new UserObj(userEntity) );
 		}
 		return listUser;
 	}
